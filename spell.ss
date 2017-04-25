@@ -21,9 +21,12 @@
 ;; KEY FUNCTION
 
 (define key
-  (lambda (w)
-     'SOME_CODE_GOES_HERE ;; *** FUNCTION BODY IS MISSING ***
-))
+    (lambda (w)
+        (if (null? w)
+            5187
+            (+ (ctv (car w)) ( * 29 (key (cdr w)))))
+    )
+)
 
 ;; -----------------------------------------------------
 ;; EXAMPLE KEY VALUES
@@ -36,18 +39,25 @@
 
 ;; value of parameter "size" should be a prime number
 (define gen-hash-division-method
-  (lambda (size) ;; range of values: 0..size-1
-     'SOME_CODE_GOES_HERE ;; *** FUNCTION BODY IS MISSING ***
-))
+    (lambda (size) ;; range of values: 0..size-1
+        (lambda (w)
+            (modulo (key w) size)
+        )
+    )
+)
 
 ;; value of parameter "size" is not critical
 ;; Note: hash functions may return integer values in "real"
 ;;       format, e.g., 17.0 for 17
 
 (define gen-hash-multiplication-method
-  (lambda (size) ;; range of values: 0..size-1
-     'SOME_CODE_GOES_HERE ;; *** FUNCTION BODY IS MISSING ***
-))
+    (lambda (size) ;; range of values: 0..size-1
+        (lambda (w)
+            (floor (* size (- (* (key w) A) (floor (* (key w) A)))))
+        )
+    )
+)
+
 
 
 ;; -----------------------------------------------------
@@ -87,9 +97,24 @@
 ;; SPELL CHECKER GENERATOR
 
 (define gen-checker
-  (lambda (hashfunctionlist dict)
-     'SOME_CODE_GOES_HERE ;; *** FUNCTION BODY IS MISSING ***
-))
+    (lambda (hashfunctionlist dict)
+        (define bitvector
+            (reduce 
+                (lambda (a b) (append (map a dict) b))
+                hashfunctionlist
+                '()
+            )
+        )
+        (lambda (w)
+            (define hashes (map (lambda(h) (h w)) hashfunctionlist) )
+            (reduce
+               (lambda (a b) (and (member a bitvector) b))
+                hashes
+                #t
+            )
+        )
+    )
+)
 
 
 ;; -----------------------------------------------------
